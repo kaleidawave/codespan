@@ -4,6 +4,7 @@ use crate::diagnostic::{Diagnostic, LabelStyle};
 use crate::files::{Error, Files, Location};
 use crate::term::renderer::{Locus, MultiLabel, Renderer, SingleLabel};
 use crate::term::Config;
+use termcolor::WriteColor;
 
 /// Calculate the number of decimal digits in `n`.
 // TODO: simplify after https://github.com/rust-lang/rust/issues/70887 resolves
@@ -30,10 +31,10 @@ where
         RichDiagnostic { diagnostic, config }
     }
 
-    pub fn render<'files>(
+    pub fn render<'files, T: WriteColor>(
         &self,
         files: &'files impl Files<'files, FileId = FileId>,
-        renderer: &mut Renderer<'_, '_>,
+        renderer: &mut Renderer<'_, '_, T>,
     ) -> Result<(), Error>
     where
         FileId: 'files,
@@ -453,10 +454,10 @@ where
         }
     }
 
-    pub fn render<'files>(
+    pub fn render<'files, T: WriteColor>(
         &self,
         files: &'files impl Files<'files, FileId = FileId>,
-        renderer: &mut Renderer<'_, '_>,
+        renderer: &mut Renderer<'_, '_, T>,
     ) -> Result<(), Error>
     where
         FileId: 'files,

@@ -108,17 +108,17 @@ type Underline = (LabelStyle, VerticalBound);
 /// ```
 ///
 /// Filler text from http://www.cupcakeipsum.com
-pub struct Renderer<'writer, 'config> {
-    writer: &'writer mut dyn WriteColor,
+pub struct Renderer<'writer, 'config, T: WriteColor> {
+    writer: &'writer mut T,
     config: &'config Config,
 }
 
-impl<'writer, 'config> Renderer<'writer, 'config> {
+impl<'writer, 'config, T: WriteColor> Renderer<'writer, 'config, T> {
     /// Construct a renderer from the given writer and config.
     pub fn new(
-        writer: &'writer mut dyn WriteColor,
+        writer: &'writer mut T,
         config: &'config Config,
-    ) -> Renderer<'writer, 'config> {
+    ) -> Renderer<'writer, 'config, T> {
         Renderer { writer, config }
     }
 
@@ -957,7 +957,7 @@ impl<'writer, 'config> Renderer<'writer, 'config> {
     }
 }
 
-impl<'writer, 'config> Write for Renderer<'writer, 'config> {
+impl<'writer, 'config, T: WriteColor> Write for Renderer<'writer, 'config, T> {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.writer.write(buf)
     }
@@ -967,7 +967,7 @@ impl<'writer, 'config> Write for Renderer<'writer, 'config> {
     }
 }
 
-impl<'writer, 'config> WriteColor for Renderer<'writer, 'config> {
+impl<'writer, 'config, T: WriteColor> WriteColor for Renderer<'writer, 'config, T> {
     fn supports_color(&self) -> bool {
         self.writer.supports_color()
     }

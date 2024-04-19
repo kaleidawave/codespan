@@ -84,8 +84,8 @@ impl From<ColorArg> for ColorChoice {
 /// * a file was removed from the file database.
 /// * a file was changed so that it is too small to have an index
 /// * IO fails
-pub fn emit<'files, F: Files<'files>>(
-    writer: &mut dyn WriteColor,
+pub fn emit<'files, F: Files<'files>, T: WriteColor>(
+    writer: &mut T,
     config: &Config,
     files: &'files F,
     diagnostic: &Diagnostic<F::FileId>,
